@@ -1,6 +1,6 @@
 ## Face and Object Detection with Amazon Rekognition
 
-To run the app in your local computer, use commands below respectively:
+To run the app in your local computer, enter your AWS access key, secret key, region and bucket information in amazon_client.py and use commands below respectively:
 
 <code>virtualenv env</code>  
 <code>source env/bin/activate</code>  
