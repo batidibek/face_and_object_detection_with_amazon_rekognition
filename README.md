@@ -1,6 +1,6 @@
 ## Face and Object Detection with Amazon Rekognition
 
-To run the app in local computer, use commands below:
+To run the app in local computer, use commands below respectively:
 
 <code>virtualenv env</code>  
 <code>source env/bin/activate</code>  
