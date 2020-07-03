@@ -1,1 +1,5 @@
-# face_and_object_detection_with_amazon_rekognition
+## Face and Object Detection with Amazon Rekognition
+
+Running on local computer:
+
+<code>Source code</code>
