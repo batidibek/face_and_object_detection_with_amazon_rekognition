@@ -2,10 +2,10 @@ import boto3
 import json
 from botocore.exceptions import NoCredentialsError
 
-AWS_ACCESS_KEY_ID = 'AKIA4RLFJBNMP3ZKUY6C'
-AWS_SECRET_ACCESS_KEY = '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'
-REGION_NAME = 'us-east-2'
-BUCKET_NAME = 'swe599-bucket'
+AWS_ACCESS_KEY_ID = 'aws_access_key_id'
+AWS_SECRET_ACCESS_KEY = 'aws_secret_access_key'
+REGION_NAME = 'region_name'
+BUCKET_NAME = 'bucket_name'
 S3_LOCATION = 'http://{}.s3.amazonaws.com/'.format(BUCKET_NAME)
 
 s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
