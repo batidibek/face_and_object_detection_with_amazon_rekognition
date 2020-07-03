@@ -1,0 +1,1 @@
+# face_and_object_detection_with_amazon_rekognition
