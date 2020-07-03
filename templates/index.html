@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--    Load Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        #tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
+
+</head>
+
+<body style="background-color: #7a7a7a">
+
+<div style="margin: 1% auto; width: 600px; text-align: center;">
+    <h3>Face and Object Detection with Rekognition</h3>
+</div>
+
+{% if labels %}
+<div style="margin: 5% auto; width: 600px; ">
+    <h4>Hover on objects to see labels.</h4>
+    <div style="position: relative;">
+        <img src={{img_url}} style="width: 600px">
+        {% for label in labels %}
+        {% for instance in label.Instances %}
+        <div id="tooltip" style="{{instance.css_style}}"><span class="tooltiptext">{{label.Name}}</span></div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+    <div style="margin-top: 10px">
+        <div style="float: left; margin-right: 10px">
+            <form action="{{ url_for('detect_faces') }}" method="POST">
+                <input type="hidden" name="image_name" value={{img_name}}/>
+                <input type="hidden" name="image_url" value={{img_url}}/>
+                <button type="submit" class="btn btn-outline-light">Detect Faces</button>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('index') }}" method="GET">
+                <button type="submit" class="btn btn-outline-light">Homepage</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% elif face_detection %}
+<div style="margin: 5% auto; width: 600px;">
+    {% if faces %}
+    <h4>Click on a face to see details.</h4>
+    {% else %}
+    <h4>There is no face in this image</h4>
+    {% endif %}
+    <div style="position: relative;">
+        <img src={{img_url}} style="width: 600px">
+        {% for face in faces %}
+        <div style="{{face.css_style}}"
+             onclick="showInfo('{{face.Gender.Value}}', '{{face.AgeRange.High}}', '{{face.AgeRange.Low}}', '{{face.Mood.Type}}', '{{face.Smile.Value}}')"></div>
+        {% endfor %}
+    </div>
+    <div id="faceInfo" style="margin-top: 10px"></div>
+    <div style="margin-top: 10px">
+        <div style="float: left; margin-right: 10px">
+            <form action="{{ url_for('detect_objects') }}" method="POST">
+                <input type="hidden" name="image_name" value={{img_name}}/>
+                <input type="hidden" name="image_url" value={{img_url}}/>
+                <button type="submit" class="btn btn-outline-light">Detect Objects</button>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('index') }}" method="GET">
+                <button type="submit" class="btn btn-outline-light">Homepage</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% elif img_url %}
+<div style="margin: 5% auto; width: 600px">
+    <img src={{img_url}} style="width: 600px">
+    <div style="margin-top: 10px">
+        <div style="float: left; margin-right: 10px">
+            <form action="{{ url_for('detect_faces') }}" method="POST">
+                <input type="hidden" name="image_name" value={{img_name}}/>
+                <input type="hidden" name="image_url" value={{img_url}}/>
+                <button type="submit" class="btn btn-outline-light">Detect Faces</button>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('detect_objects') }}" method="POST">
+                <input type="hidden" name="image_name" value={{img_name}}/>
+                <input type="hidden" name="image_url" value={{img_url}}/>
+                <button type="submit" class="btn btn-outline-light">Detect Objects</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div style="margin: 10% auto; width: 600px">
+    <div style="margin: 0 auto; width: 430px">
+        {% if upload_error %}
+        <h5 style="color: red">You need to upload an Image</h5>
+        {% else %}
+        <h5>Upload an Image</h5>
+        {% endif %}
+        <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" accept=".jpg,.png" name="file"/>
+            <input type="submit"/>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    function showInfo(gender, high, low, mood, smile) {
+        let face_info = document.getElementById("faceInfo");
+        face_info.innerHTML = "GENDER: " + gender + ", AGE: " + low + " - " + high + ", MOOD: " + mood + ", SMILING: " + smile;
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        inte
+        grity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
